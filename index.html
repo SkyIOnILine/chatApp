@@ -10,6 +10,7 @@
 	crossorigin="anonymous">
 	<style>
 		#messages { height: 300px; }
+		#clear {margin: 5px; }
 	</style>
 </head>
 <body>
@@ -17,12 +18,15 @@
 		<div class="row">
 			<div class="col-md-6 offset-md-3 col-sm-12">
 				<h1 class="text-center">Simple chat demo</h1>
-				<button id="clear" class="btn btn-danger">Clear chat</button>
+				<!-- <button id="clear" class="btn btn-danger">Clear chat</button> -->
 				<br>
 				<div id="status"></div>
 				<div id="chat">
 					<input type="text" id="username" class="form-control" placeholder="Enter name...">
 					<br>
+					<input type="text" id="email" class="form-control" placeholder="Enter email address">
+					<br>
+					<!-- <br> -->
 					<div class="card">
 						<div class="card-block" id="messages">
 							
@@ -30,7 +34,7 @@
 					</div>
 					<br>
 					<textarea name="" id="textarea"class="form-control" placeholder="Enter message"></textarea>
-
+					<button id="clear" class="btn btn-danger">Clear chat</button>
 				</div>
 			</div>
 		</div>
@@ -48,6 +52,7 @@
 			const messages = element('messages');
 			const textarea = element('textarea');
 			const username = element('username');
+			const email = element('email');
 			const clearBtn = element('clear');
 
 			// set default status
@@ -73,7 +78,7 @@
 				
 				// handle output
 				socket.on('output', data => {
-					// console.log(data);
+					console.log(data);
 					if (data.length) {
 						for (let x = 0; x < data.length; x++) {
 							// build message div
@@ -103,6 +108,7 @@
 						// emit to server input
 						socket.emit('input', {
 							name: username.value,
+							email: email.value,
 							message: textarea.value
 
 						});
@@ -113,11 +119,11 @@
 				});
 
 				// handle chat clear
-				if (clearBtn. value === '') {
-					clearBtn.style.display = 'none';
-				} else {
-					clearBtn.style.display = 'block';
-				}
+				// if (clearBtn. value === '') {
+				// 	clearBtn.style.display = 'none';
+				// } else {
+				// 	clearBtn.style.display = 'block';
+				// }
 
 				clearBtn.addEventListener('click', () => {
 					socket.emit('clear');

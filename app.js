@@ -33,15 +33,16 @@ mongo.connect(url, (err, client) => {
 			socket.on('input', data => {
 				let name = data.name;
 				let message = data.message;
+				let email = validateEmail(data.email);
 				console.log(data);
 
 				// check for name and message
-				if (name == '' || message == '') {
+				if (name == '' || message == '' || email == '') {
 					// send error status
-					sendStatus('Please enter a name and status');
+					sendStatus('Please enter a name, email and message');
 				} else {
 					// insert message to db
-					chat.insert({name: name, message: message}, function(){
+					chat.insert({name: name,email: email, message: message}, function(){
 						io.emit('output', [data]);
 
 						//send status object
@@ -64,3 +65,8 @@ mongo.connect(url, (err, client) => {
 		});
 	});
 });
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
