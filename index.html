@@ -17,7 +17,7 @@
 		<div class="row">
 			<div class="col-md-6 offset-md-3 col-sm-12">
 				<h1 class="text-center">Simple chat demo</h1>
-				<!-- <button id="clear" class="btn btn-danger">Clear chat</button> -->
+				<button id="clear" class="btn btn-danger">Clear chat</button>
 				<br>
 				<div id="status"></div>
 				<div id="chat">
@@ -39,33 +39,33 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 	<script>
 		(function() {
-			var element = function(id) {
+			const element = function(id) {
 				return document.getElementById(id);
 			}
 
 			// get elemets
-			var status = element('status');
-			var messages = element('messages');
-			var textarea = element('textarea');
-			var username = element('username');
-			var clearBtn = element('clear');
+			const status = element('status');
+			const messages = element('messages');
+			const textarea = element('textarea');
+			const username = element('username');
+			const clearBtn = element('clear');
 
 			// set default status
-			var statusDefault = status.textContent;
+			const statusDefault = status.textContent;
 
-			var setStatus = s => {
+			const setStatus = s => {
 				// set status
 				status.textContent = s;
 
 				if (s !== statusDefault) {
-					var delay =setTimeout(function() {
+					const delay =setTimeout(function() {
 						setStatus(statusDefault);
 					}, 4000);
 				} 
 			}
 
 			// connect to socket.io
-			var socket = io.connect('http://127.0.0.1:4000');
+			const socket = io.connect('http://127.0.0.1:4000');
 
 			// check for connection
 			if (socket !== undefined) {
@@ -75,9 +75,9 @@
 				socket.on('output', data => {
 					// console.log(data);
 					if (data.length) {
-						for (var x = 0; x < data.length; x++) {
+						for (let x = 0; x < data.length; x++) {
 							// build message div
-							var message = document.createElement('div');
+							const message = document.createElement('div');
 							message.setAttribute('class', 'chat-message');
 							message.textContent = data[x].name + ": " + data[x].message;
 							messages.appendChild(message);
@@ -89,7 +89,7 @@
 				// get status
 				socket.on('status', data => {
 					// get message status
-					setstatus((typeof data === 'object') ? data.message : data);
+					setStatus((typeof data === 'object') ? data.message : data);
 
 					// if status is clear, clear text
 					if (data.clear) {
@@ -112,15 +112,21 @@
 					}
 				});
 
-				// // handle chat clear
-				// clearBtn.addEventListener('click', () => {
-				// 	socket.emit('clear');
-				// });
+				// handle chat clear
+				if (clearBtn. value === '') {
+					clearBtn.style.display = 'none';
+				} else {
+					clearBtn.style.display = 'block';
+				}
+
+				clearBtn.addEventListener('click', () => {
+					socket.emit('clear');
+				});
 				
-				// // clear message
-				// socket.on('cleared', () => {
-				// 	messages.textContent = '';
-				// });
+				// clear message
+				socket.on('cleared', () => {
+					messages.textContent = '';
+				});
 			}
 
 		})();

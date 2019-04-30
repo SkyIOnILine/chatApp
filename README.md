@@ -5,7 +5,7 @@ Install Dependencies
 
 npm install 
 
-Run Server
+Run Server (app.js)
 
 npm start
 

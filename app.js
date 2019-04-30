@@ -33,6 +33,7 @@ mongo.connect(url, (err, client) => {
 			socket.on('input', data => {
 				let name = data.name;
 				let message = data.message;
+				console.log(data);
 
 				// check for name and message
 				if (name == '' || message == '') {
